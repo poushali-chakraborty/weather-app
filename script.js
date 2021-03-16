@@ -44,6 +44,49 @@ document.getElementById("c").addEventListener('click',()=>{
 	}
 });
 
+document.getElementById("city").addEventListener("keyup",(event)=>{
+
+	
+	if(event.key=='Enter')
+	{
+	let city=document.getElementById("city").value;
+
+	document.getElementById("city").value="";
+
+	let temperatureDesc=document.querySelector(".temperature-description")
+	let temperatureDeg=document.querySelector(".temperature-degree")
+	let location=document.querySelector(".location-timezone")
+	
+	
+	const api=`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=50876041e8b0c7db0f2d2f83a1e3b894`
+	fetch(api).then(response=>{
+		
+			return response.json();
+        
+		}).then(data=>{//console.log(data);
+			if( data.cod=="404"){
+				console.log("error");
+			}
+			else{
+			console.log(data.main.temp);
+			console.log(data.weather[0].main+": "+data.weather[0].description);
+			console.log(data.name);
+
+			//set dom elements from the api
+			
+			temperatureDeg.textContent=data.main.temp;
+			
+
+			temperatureDesc.textContent=data.weather[0].description;
+			location.textContent=data.name+"/"+data.sys.country;
+			setIcons("icon",getIconId(data.weather[0].main));
+			}
+		});
+	}
+		
+	
+});
+
 window.addEventListener('load',()=>{
 	
 	let temperatureDesc=document.querySelector(".temperature-description")
@@ -72,7 +115,6 @@ window.addEventListener('load',()=>{
 		
 	
 });
-
 
 
 
